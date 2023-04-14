@@ -1,0 +1,14 @@
+body {
+  background-color: #000000;
+}
+#clock {
+  font-family: "Arial";
+  text-align: center;
+  font-size: 400%;
+  text-shadow: 0 0 20px #aaffaa, 0 0 20px rgba(10, 175, 230, 0);
+  color: #e1ffda;
+  height: 20%;
+}
+.clock-wrapper {
+  text-align: center;
+}
