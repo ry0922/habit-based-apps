@@ -1,0 +1,364 @@
+@charset "UTF-8";
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.col-3 {
+  width: 30%;
+  position: relative;
+}
+
+header#header {
+  height:65px;
+  background-color: rgb(104, 161, 227);
+}
+
+#header h1 {
+  color: rgb(255, 255, 255);
+  margin: 0;
+  padding: 10px;
+  -webkit-text-stroke: 0.5px #000;
+}
+
+.about {
+  margin: 0 auto;
+  padding: 0px 10px;
+  background-color: rgb(25, 27, 159);
+  width: 150px;
+  border-radius: 20px;
+}
+
+.about h1 {
+  color: rgb(255, 255, 255);
+  font-size: 2em;
+  text-align: center;
+}
+
+input:focus::placeholder {
+	color: transparent;
+}
+
+input {
+  font-size: 35px;
+  height: 2em;
+  padding: 0 16px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+
+.input {
+  margin: auto;
+  width: 55%;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-title {
+  font-size: 35px;
+  margin-bottom: 0px;
+  align-self: flex-start;
+}
+
+.col {
+  margin-top: 250px;
+}
+
+.button {
+	display: block;
+  font-size: 18px;
+	text-align: center;
+	text-decoration: none;
+	width: 250px;
+  height: 60px;
+	margin: auto;
+	padding: 1rem 4rem;
+	font-weight: bold;
+  background: #1de151;
+	border: 2px solid #1c9a53ec;
+	color: #fff;
+	border-radius: 100vh;
+	transition: 0.5s;
+}
+.button:hover {
+	opacity: 0.6;
+}
+
+/*index.html*/
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  height: calc(100% - 65px);
+}
+
+.goal {
+  width: 50%;
+  height: 30%;
+  /* background-color: #d92727; */
+}
+
+.goal-text-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0px 10px;
+}
+
+p#goal-text {
+  color: #000000;
+  margin-left: 5%;
+  font-size: xx-large;
+  border: 1px solid #000;
+  border-radius: 1vh;
+  padding: 5px;
+  width: 70%;
+}
+
+a.delete-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+	width: 30px;
+  height: 30px;
+	padding: 0.5rem 0.5rem;
+  background: #d92727;
+	border: 2px solid #b52e2e;
+	border-radius: 1vh;
+	transition: 0.5s;
+}
+
+a.delete-button:hover {
+  opacity: 0.6;
+}
+
+.date-container {
+  width: 50%;
+  height: 50%;
+  display: flex;
+}
+
+.start-date {
+  width: 50%;
+  height: 100%;
+  /* background-color: yellow; */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.text-container {
+  margin-top: 5%;
+  font-size: 2.2vw;
+}
+
+#year {
+  margin-top:8%;
+  font-size: 3vw
+}
+
+#month-day {
+  margin-top: 0%;
+  font-size: 3vw
+}
+
+#days {
+  font-size: 6vw;
+}
+
+.days-text {
+  font-size: 3vw;
+}
+
+#days-container {
+  margin-top: 6%;
+}
+
+.continuous-days {
+  width: 50%;
+  height: 100%;
+  /* background-color: green; */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+
+.circle{
+  width: 70%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  border: solid 4px skyblue;
+  margin: auto;
+  position: relative;
+}
+
+
+.calender {
+  width: 50%;
+  height: 65%;
+  /* background-color: blue; */
+  vertical-align: top;
+}
+
+.button-area {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 50%;
+  height: 50%;
+  /* background-color: #c727d9; */
+}
+
+a.end-button {
+  display: block;
+	text-align: center;
+	text-decoration: none;
+	width: 120px;
+  margin-bottom: 3%;
+  margin-right: 3%;
+	padding: 1rem 4rem;
+  font-size: large;
+	font-weight: bold;
+  background: #1de151;
+	border: 2px solid #23a569;
+	color: #fff;
+	border-radius: 1vh;
+	transition: 0.5s;
+}
+
+a.end-button:hover {
+  opacity: 0.6;
+}
+
+/*end.html*/
+
+.main-message {
+  width: 100%;
+  height: calc( calc(100% - 65px) * 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 200%;
+}
+
+.notice-message {
+  width: 100%;
+  height: calc( calc(100% - 65px) * 0.2);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  font-size: 150%;
+}
+
+p.notice {
+  margin-bottom: 3%;
+  margin-right: 3%;
+}
+
+#count {
+  color: #d92727;
+  font-size: 175%;
+}
+
+/*カレンダー*/
+
+/*全体*/
+.calender-wrapper{
+  margin-top: 3%;
+  color: #666;
+}
+
+h1#header {
+  text-align: center;
+  font-size: 3vh;
+  margin: 0px;
+}
+
+/*カレンダー*/
+#calendar {
+  text-align: center;
+  width: 80%;
+}
+table {
+  outline: 2px solid #ddd;
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 3%;
+  margin-left: 12%;
+
+}
+th {
+  outline: 1px solid #ddd;
+  color: #000;
+  height: 7vh;
+  width: 35vw;
+  font-size: 2.5vh;
+}
+td {
+  outline: 1px solid #ddd;
+  text-align: left;
+  vertical-align: top;
+  height: 7vh;
+  width: 35vw;
+  font-size: 2vh;
+}
+
+
+.completed {
+  text-align: center;
+  color: #1de151;
+  font-size: 2.8vh;
+  font-weight: bold;
+
+}
+
+.uncompleted {
+  text-align: center;
+  color: #d92727;
+  font-size: 2.8vh;
+  font-weight: bold;
+}
+
+/*日曜日*/
+td:first-child {
+  color: red;
+}
+/*土曜日*/
+td:last-child {
+  color: blue;
+}
+/*前後月の日付*/
+td.disabled {
+  color: #ccc;
+}
+/*本日*/
+td.today {
+  background-color: #f8ff8f;
+  color: #000000;
+}
+
+/*ボタン*/
+#next-prev-button {
+  display: flex;
+  justify-content: space-around;
+}
+#next-prev-button button{
+  cursor: pointer;
+  background: rgb(104, 161, 227);
+  color: #fff;
+  border: 1px solid rgb(142, 175, 212);
+  border-radius: 4px;
+  font-size: 1rem;
+  padding: 0.1rem 1.8rem;
+}
+#next-prev-button button:hover{
+  opacity: 0.6;
+}
+
+

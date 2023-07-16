@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>index</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/todolist.js"></script>
+  <script src="js/calender.js"></script>
+</head>
+
+<body onload="showToDo(); initCalender(); showCompletedDate();">
+  <header id="header" class="wrapper">
+    <h1>習慣化アプリ</h1>
+  </header>
+  <div class="container">
+    <div class="goal">
+      <h1>目標</h1>
+      <div class="goal-text-container">
+      <p id="goal-text"></p>
+      <a href="init.html" class="delete-button" onclick="todo_all_del()"><img src="img/gomi20.png" alt="削除"></a>
+      </div>
+    </div>
+    <div class="calender">
+      <div class="calender-wrapper">
+        <!-- ボタンクリックで月移動 -->
+        <div id="next-prev-button">
+          <button id="prev" onclick="prev(); showCompletedDate();">‹</button>
+          <!-- xxxx年xx月を表示 -->
+          <h1 id="header"></h1>
+          <button id="next" onclick="next(); showCompletedDate();">›</button>
+        </div>
+
+        <!-- カレンダー -->
+        <div id="calendar"></div>
+      </div>
+    </div>
+    <div class="date-container">
+      <div class="start-date">
+        <span class="circle">
+          <div class="text-container">開始日</div>
+          <div id="year"></div>
+          <div id="month-day">
+            <span id="month"></span>
+            <span>/</span>
+            <span id="day"></span>
+          </div>
+        </span>
+      </div>
+
+      <div class="continuous-days">
+        <span class="circle">
+          <div class="text-container">継続日数</div>
+          <div id="days-container">
+            <span id="days"></span>
+            <span class="days-text">日</span>
+          </div>
+      </div>
+      </span>
+    </div>
+    <div class="button-area">
+      <a href="end.html" class="end-button" onclick="completeToDo()">完了</a>
+    </div>
+  </div>
+</body>
+
+</html>
