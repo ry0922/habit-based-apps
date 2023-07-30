@@ -5,14 +5,13 @@ const { app, BrowserWindow, ipcMain } = electron;
 const globalShortcut = electron.globalShortcut;
 const Store = require('electron-store');
 const path = require("path");           //pathはjoin用
-const { exit } = require("process");
 let mainWindow;
 const Store_Data = new Store({ name: "data" });//Dataを格納しておくStore
 const regedit = require('regedit');
 
 //electron が準備終わったとき
 app.on("ready", function () {
-    //     // レジストリキーを登録する
+    // レジストリキーを登録する
     const appPath = path.resolve(path.resolve(app.getAppPath(),'../../'), 'electronreminder.exe');
     regedit.putValue({
         'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run': {
@@ -25,7 +24,7 @@ app.on("ready", function () {
         if (err) {
             console.error(err);
         } else {
-            console.log('レジストリキーを追加しました');
+            console.log('Added registry key');
         }
     });
     //その日タスク完了してた場合
@@ -36,31 +35,27 @@ app.on("ready", function () {
 
     //新しいウインドウを開く
     mainWindow = new BrowserWindow({
-        width: 600,
-        height: 800,
-        frame: false,
-        'fullscreen': true,
+        frame: true,
+        'fullscreen': false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         }
     });
 
-    console.log(Store_Data.get('ToDoList').length);
-
-    if (Store_Data.get('ToDoList').length === 0) {
+    if (Store_Data.has('ToDoList')) {
         //mainWindowでhtmlファイルを開く
         //"file://" + path.join(__dirname, 'index.html'); => file://作業ディレクトリ/index.html
-        mainWindow.loadURL("file://" + path.join(path.resolve(__dirname, '../'), 'init.html'));
-    } else {
         mainWindow.loadURL("file://" + path.join(path.resolve(__dirname, '../'), 'index.html'));
+    } else {
+        mainWindow.loadURL("file://" + path.join(path.resolve(__dirname, '../'), 'init.html'));
     }
 
     //メインウインドウが閉じたらアプリが終了する
-    mainWindow.on("closed", function () {
+    mainWindow.on("closed", () => {
         app.quit();
     });
 
-    app.on('browser-window-focus', function () {
+    app.on('browser-window-focus', () => {
         // 最小化のショートカットキー
         globalShortcut.register('CommandOrControl+M', () => {
             console.log('CommandOrControl+M is pressed: Shortcut Disabled')
@@ -83,7 +78,7 @@ ipcMain.handle("setlist", async (event, data) => {
 });
 
 // リスト削除
-ipcMain.handle('todo_all_del', async (event) => {
+ipcMain.handle('toDoAllDel', async (event) => {
     Store_Data.delete('ToDoList');//ToDoListのデータを削除
 });
 
@@ -93,7 +88,6 @@ ipcMain.handle('window_close', async (event) => {
 
 function checkCompleted() {
     const now = new Date();
-    console.log(now);
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const ToDoList = Store_Data.get('ToDoList', []);
     let completedFlag = 0;
@@ -106,8 +100,6 @@ function checkCompleted() {
         if (completedDate.getTime() === today.getTime()) {
             completedFlag = 1;
         }
-        console.log(completedDate);
-        console.log(today);
     });
     if (completedFlag === 1) {
         return true;

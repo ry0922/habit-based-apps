@@ -24,7 +24,6 @@ async function showToDo() {
   const ToDoList = await window.dataapi.getlist();
   goalText.textContent = ToDoList[0].name;
   // 開始日
-  console.log(typeof ToDoList[0].date);
   const year = document.getElementById('year');
   const month = document.getElementById('month');
   const day = document.getElementById('day');
@@ -34,7 +33,7 @@ async function showToDo() {
   // 継続日数
   const days = document.getElementById('days');
   // 前日未完了の場合、継続日数リセット
-  if(ToDoList[0].completedDate[ToDoList[0].completedDate.length - 1] !== `${today.getFullYear()},${today.getMonth() + 1},${today.getDate() - 1}`){
+  if(!isCompletedPreviousDay(ToDoList)){
     ToDoList[0].days = 0;
     await window.dataapi.setlist(ToDoList);
   }
@@ -49,7 +48,7 @@ async function completeToDo() {
   const ToDoList = await window.dataapi.getlist();
   const today = new Date();
   // タスクが前日に完了状態なら継続日数プラス
-  if (ToDoList[0].completedDate[ToDoList[0].completedDate.length - 1] === `${today.getFullYear()},${today.getMonth() + 1},${today.getDate() - 1}`) {
+  if (isCompletedPreviousDay(ToDoList)) {
     ToDoList[0].days++;
   } else {
     ToDoList[0].days = 1;
@@ -66,10 +65,9 @@ async function showCompletedDate() {
 
   ToDoList[0].completedDate.forEach((data, i, array) => {
     let date = data.split(',');
-    console.log(date);
-    console.log(date);
-    if (!getDateArea(date)) return;
-    console.log(date);
+    if (!getDateArea(date)) {
+      return;
+    }
     let completedDateArea = document.getElementById(`${date[0]}_${date[1]}_${date[2]}`);
     if (completedDateArea === null) {
       return;
@@ -79,7 +77,6 @@ async function showCompletedDate() {
   // タスク開始日から今日まで未完了だった日に×をつける
   let today = new Date();
   let allday = new Date(ToDoList[0].year, ToDoList[0].month - 1, ToDoList[0].day);
-  console.log(allday);
   while (today.getDate() !== allday.getDate()) {
     let alldayArea = document.getElementById(`${allday.getFullYear()}_${allday.getMonth() + 1}_${allday.getDate()}`);
     if (alldayArea === null) {
@@ -93,7 +90,18 @@ async function showCompletedDate() {
   }
 }
 
-async function getDateArea(date) {
+// 前日にタスクを完了したかどうかを確認する
+function isCompletedPreviousDay(ToDoList) {
+  const lastCompletedDate = ToDoList[0].completedDate.slice(-1)[0];
+  const today = new Date();
+  if (lastCompletedDate === `${today.getFullYear()},${today.getMonth() + 1},${today.getDate() - 1}`){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+function getDateArea(date) {
   let dateArea = document.getElementById(`${date[0]}_${date[1]}_${date[2]}`);
   if (dateArea === null) {
     return;
@@ -101,7 +109,7 @@ async function getDateArea(date) {
   return dateArea;
 }
 
-async function todo_all_del() {
+async function toDoAllDel() {
   const ToDoList = await window.dataapi.getlist();
   ToDoList.shift();
   await window.dataapi.setlist(ToDoList);
