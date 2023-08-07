@@ -28,7 +28,7 @@ app.on("ready", function () {
         }
     });
     //その日タスク完了してた場合
-    if (checkCompleted()) {
+    if (isCompletedToday()) {
         app.quit();
         return;
     }
@@ -82,11 +82,13 @@ ipcMain.handle('toDoAllDel', async (event) => {
     Store_Data.delete('ToDoList');//ToDoListのデータを削除
 });
 
+// ウィンドウを閉じる
 ipcMain.handle('window_close', async (event) => {
     app.quit();
 });
 
-function checkCompleted() {
+// 今日、ToDoが完了したかどうかを確認して返す関数
+function isCompletedToday() {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const ToDoList = Store_Data.get('ToDoList', []);

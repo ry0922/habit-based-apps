@@ -1,6 +1,6 @@
 'use strict'
+// ToDoリストを初期化したのちに入力されたToDoをリストに追加する関数
 async function addToDo() {
-  console.log("addtodo");
   initToDo();
   const item = document.querySelector("#ToDoItem").value;
   const ToDoList = await window.dataapi.getlist();
@@ -18,6 +18,7 @@ async function addToDo() {
   await window.dataapi.setlist(ToDoList);//preloadを介してmainjsでStoreのデータを保存
 }
 
+// ToDoのステータスを表示する関数
 async function showToDo() {
   // 目標名表示
   const goalText = document.getElementById('goal-text');
@@ -40,10 +41,12 @@ async function showToDo() {
   days.textContent = ToDoList[0].days;
 }
 
+// ToDoリストを初期化する関数
 async function initToDo() {
   await window.dataapi.todo_all_del();
 }
 
+// ToDoを完了状態にする関数
 async function completeToDo() {
   const ToDoList = await window.dataapi.getlist();
   const today = new Date();
@@ -57,6 +60,7 @@ async function completeToDo() {
   await window.dataapi.setlist(ToDoList);
 }
 
+// カレンダーにToDoの完了状態を表示する関数
 async function showCompletedDate() {
   const ToDoList = await window.dataapi.getlist();
   if (ToDoList[0].completedDate.length === 0) {
@@ -101,6 +105,7 @@ function isCompletedPreviousDay(ToDoList) {
   }
 }
 
+// カレンダーから日付領域を取得して返す関数
 function getDateArea(date) {
   let dateArea = document.getElementById(`${date[0]}_${date[1]}_${date[2]}`);
   if (dateArea === null) {
@@ -109,6 +114,7 @@ function getDateArea(date) {
   return dateArea;
 }
 
+// ToDoリストをすべて削除する関数
 async function toDoAllDel() {
   const ToDoList = await window.dataapi.getlist();
   ToDoList.shift();

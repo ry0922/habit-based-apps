@@ -1,4 +1,5 @@
 'use strict'
+// 残り秒数をカウントしてエリアに表示する関数
 function countDown(seconds) {
   const count = document.getElementById('count');
   count.innerText = seconds;
