@@ -50,7 +50,7 @@ async function initToDo() {
 async function completeToDo() {
   const ToDoList = await window.dataapi.getlist();
   const today = new Date();
-  // タスクが前日に完了状態なら継続日数プラス
+  //  ToDoが前日に完了状態なら継続日数プラス
   if (isCompletedPreviousDay(ToDoList)) {
     ToDoList[0].days++;
   } else {
@@ -78,13 +78,15 @@ async function showCompletedDate() {
     }
     completedDateArea.innerHTML += '<div class=completed>〇</div>';
   });
-  // タスク開始日から今日まで未完了だった日に×をつける
+  // ToDo開始日から今日まで未完了だった日に×をつける
   let today = new Date();
   let allday = new Date(ToDoList[0].year, ToDoList[0].month - 1, ToDoList[0].day);
   while (today.getDate() !== allday.getDate()) {
     let alldayArea = document.getElementById(`${allday.getFullYear()}_${allday.getMonth() + 1}_${allday.getDate()}`);
+    // ToDo開始月と今日の月が異なるとき
     if (alldayArea === null) {
-      return;
+      allday = new Date(today.getFullYear(), today.getMonth(), 1);
+      alldayArea = document.getElementById(`${allday.getFullYear()}_${allday.getMonth() + 1}_${allday.getDate()}`);
     }
     // 子要素が空なら未完了印をつける
     if (alldayArea.children.length === 0) {
