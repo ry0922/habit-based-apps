@@ -67,12 +67,12 @@ async function showCompletedDate() {
     return;
   }
 
-  ToDoList[0].completedDate.forEach((data, i, array) => {
+  ToDoList[0].completedDate.forEach((data) => {
     let date = data.split(',');
-    if (!getDateArea(date)) {
+    if (!arrayToArea(date)) {
       return;
     }
-    let completedDateArea = document.getElementById(`${date[0]}_${date[1]}_${date[2]}`);
+    let completedDateArea = arrayToArea(date);
     if (completedDateArea === null) {
       return;
     }
@@ -80,19 +80,23 @@ async function showCompletedDate() {
   });
   // ToDo開始日から今日まで未完了だった日に×をつける
   let today = new Date();
-  let allday = new Date(ToDoList[0].year, ToDoList[0].month - 1, ToDoList[0].day);
-  while (today.getDate() !== allday.getDate()) {
-    let alldayArea = document.getElementById(`${allday.getFullYear()}_${allday.getMonth() + 1}_${allday.getDate()}`);
+  // 探索用変数、初期値：開始日
+  let dayToSearch = new Date(ToDoList[0].year, ToDoList[0].month - 1, ToDoList[0].day);
+  // 開始日から今日まで探索
+  while (today.getDate() !== dayToSearch.getDate()) {
+    let dayToSearchArea = dateToArea(dayToSearch);
     // ToDo開始月と今日の月が異なるとき
-    if (alldayArea === null) {
-      allday = new Date(today.getFullYear(), today.getMonth(), 1);
-      alldayArea = document.getElementById(`${allday.getFullYear()}_${allday.getMonth() + 1}_${allday.getDate()}`);
+    if (dayToSearchArea === null) {
+      dayToSearch = new Date(today.getFullYear(), today.getMonth(), 1);
+      dayToSearchArea = dateToArea(dayToSearch);
     }
     // 子要素が空なら未完了印をつける
-    if (alldayArea.children.length === 0) {
-      alldayArea.innerHTML += '<div class=uncompleted>×</div>'
+    if (dayToSearchArea.children.length === 0) {
+      let uncompletedDateArea = dayToSearchArea;
+      uncompletedDateArea.innerHTML += '<div class=uncompleted>×</div>'
     }
-    allday.setDate(allday.getDate() + 1);
+    // 
+    dayToSearch.setDate(dayToSearch.getDate() + 1);
   }
 }
 
@@ -107,12 +111,18 @@ function isCompletedPreviousDay(ToDoList) {
   }
 }
 
-// カレンダーから日付領域を取得して返す関数
-function getDateArea(date) {
+// 日付配列からカレンダーの日付領域を取得して返す関数
+function arrayToArea(date) {
   let dateArea = document.getElementById(`${date[0]}_${date[1]}_${date[2]}`);
   if (dateArea === null) {
     return;
   }
+  return dateArea;
+}
+
+// date型からカレンダーの日付領域を取得して返す関数
+function dateToArea(date) {
+  const dateArea = document.getElementById(`${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`);
   return dateArea;
 }
 
