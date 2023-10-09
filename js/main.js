@@ -4,9 +4,11 @@ const electron = require("electron");
 const { app, BrowserWindow, ipcMain } = electron;
 const globalShortcut = electron.globalShortcut;
 const Store = require('electron-store');
-const path = require("path");           //pathはjoin用
+//pathはjoin用
+const path = require("path");
 let mainWindow;
-const Store_Data = new Store({ name: "data" });//Dataを格納しておくStore
+//Dataを格納しておくStore
+const Store_Data = new Store({ name: "data" });
 const regedit = require('regedit');
 
 //electron が準備終わったとき
@@ -68,7 +70,7 @@ app.on("ready", function () {
 });
 
 // getlist(data取得処理)
-ipcMain.handle('getlist', async (event, data) => {
+ipcMain.handle('getlist', async () => {
     return Store_Data.get('ToDoList', []);//ToDoListがあれば取り出し、なければからのリストを返す
 });
 
@@ -78,12 +80,12 @@ ipcMain.handle("setlist", async (event, data) => {
 });
 
 // リスト削除
-ipcMain.handle('toDoAllDel', async (event) => {
+ipcMain.handle('toDoAllDel', async () => {
     Store_Data.delete('ToDoList');//ToDoListのデータを削除
 });
 
 // ウィンドウを閉じる
-ipcMain.handle('window_close', async (event) => {
+ipcMain.handle('window_close', async () => {
     app.quit();
 });
 
@@ -93,17 +95,18 @@ function isCompletedToday() {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const ToDoList = Store_Data.get('ToDoList', []);
     let completedFlag = 0;
+    // ToDoがない場合
     if(typeof ToDoList[0] === "undefined"){
         return;
     }
-    ToDoList[0].completedDate.forEach((data, i, array) => {
+    ToDoList[0].completedDate.forEach((data) => {
         let date = data.split(',');
         let completedDate = new Date(date[0], date[1] - 1, date[2]);
         if (completedDate.getTime() === today.getTime()) {
             completedFlag = 1;
         }
     });
-    if (completedFlag === 1) {
+    if (completedFlag) {
         return true;
     } else {
         return false;
