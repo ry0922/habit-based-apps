@@ -70,18 +70,18 @@ app.on("ready", function () {
 });
 
 // getlist(data取得処理)
-ipcMain.handle('getlist', async () => {
-    return Store_Data.get('ToDoList');//ToDoListがあれば取り出し、なければからのリストを返す
+ipcMain.handle('gettodo', async () => {
+    return Store_Data.get('ToDo');//ToDoListがあれば取り出し、なければからのリストを返す
 });
 
 // setlist(data保存処理)
-ipcMain.handle("setlist", async (event, data) => {
-    Store_Data.set('ToDoList', data);       // 保存
+ipcMain.handle("settodo", async (event, data) => {
+    Store_Data.set('ToDo', data);       // 保存
 });
 
 // リスト削除
 ipcMain.handle('todoalldel', async () => {
-    Store_Data.delete('ToDoList');//ToDoListのデータを削除
+    Store_Data.delete('ToDo');//ToDoListのデータを削除
 });
 
 // ウィンドウを閉じる
@@ -93,13 +93,13 @@ ipcMain.handle('window_close', async () => {
 function isCompletedToday() {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const ToDoList = Store_Data.get('ToDoList', []);
+    const ToDo = Store_Data.get('ToDo');
     let completedFlag = 0;
     // ToDoがない場合
-    if(typeof ToDoList[0] === "undefined"){
+    if(typeof ToDo === "undefined"){
         return;
     }
-    ToDoList[0].completedDate.forEach((data) => {
+    ToDo.completedDate.forEach((data) => {
         let date = data.split(',');
         let completedDate = new Date(date[0], date[1] - 1, date[2]);
         if (completedDate.getTime() === today.getTime()) {

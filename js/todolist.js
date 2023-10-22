@@ -1,11 +1,10 @@
 'use strict'
 // ToDoリストを初期化したのちに入力されたToDoをリストに追加する関数
 function addToDo() {
-  initToDo();
   const item = document.querySelector("#ToDoItem").value;
   let today = new Date();
   let completedDate = new Array();
-  let goal = {
+  let ToDo = {
     name: item,
     year: today.getFullYear(),
     month: today.getMonth() + 1,
@@ -13,31 +12,31 @@ function addToDo() {
     days: 0,
     completedDate: completedDate
   };
-  setToDo(goal);
+  setToDo(ToDo);
 }
 
 // ToDoのステータスを表示する関数
 async function showToDo() {
+  const ToDo = await fetchToDo();
+  console.log(ToDo);
   // 目標名表示
   const goalText = document.getElementById('goal-text');
-  const ToDoList = await fetchToDo();
-  console.log(ToDoList);
-  goalText.textContent = ToDoList.name;
+  goalText.textContent = ToDo.name;
   // 開始日
   const year = document.getElementById('year');
+  year.textContent = ToDo.year;
   const month = document.getElementById('month');
+  month.textContent = ToDo.month;
   const day = document.getElementById('day');
-  year.textContent = ToDoList.year;
-  month.textContent = ToDoList.month;
-  day.textContent = ToDoList.day;
+  day.textContent = ToDo.day;
   // 継続日数
-  const days = document.getElementById('days');
   // 前日未完了の場合、継続日数リセット
-  if(!isCompletedPreviousDay(ToDoList)){
-    ToDoList.days = 0;
+  if(!isCompletedPreviousDay(ToDo)){
+    ToDo.days = 0;
     // await window.dataapi.setlist(ToDoList);
   }
-  days.textContent = ToDoList.days;
+  const days = document.getElementById('days');
+  days.textContent = ToDo.days;
 }
 
 // ToDoリストを初期化する関数
@@ -47,31 +46,33 @@ async function initToDo() {
 
 // ToDoを完了状態にする関数
 async function completeToDo() {
-  const ToDoList = await window.dataapi.getlist();
+  const ToDo = await fetchToDo();
   const today = new Date();
+  console.log(ToDo);
   //  ToDoが前日に完了状態なら継続日数プラス
-  if (isCompletedPreviousDay(ToDoList)) {
-    ToDoList[0].days++;
+  if (isCompletedPreviousDay(ToDo)) {
+    ToDo.days++;
   } else {
-    ToDoList[0].days = 1;
+    ToDo.days = 1;
   }
-  ToDoList[0].completedDate.push(dateToCSV(today, 0));
-  await window.dataapi.setlist(ToDoList);
+  ToDo.completedDate.push(dateToCSV(today, 0));
+  await setToDo(ToDo);
 }
 
 // カレンダーにToDoの完了状態を表示する関数
 async function showCompletedDate() {
-  const ToDoList = await window.dataapi.getlist();
-  if (!ToDoList.completedDate.length) {
+  const ToDo = await fetchToDo();
+  // 完了日がない場合返却
+  if (!ToDo.completedDate.length) {
     return;
   }
 
-  ToDoList[0].completedDate.forEach((data) => {
+  ToDo.completedDate.forEach((data) => {
     let date = data.split(',');
-    if (!arrayToArea(date)) {
+    if (!arrayToElement(date)) {
       return;
     }
-    let completedDateArea = arrayToArea(date);
+    let completedDateArea = arrayToElement(date);
     if (!completedDateArea) {
       return;
     }
@@ -80,14 +81,14 @@ async function showCompletedDate() {
   // ToDo開始日から今日まで未完了だった日に×をつける
   let today = new Date();
   // 探索用変数、初期値：開始日
-  let dayToSearch = new Date(ToDoList[0].year, ToDoList[0].month - 1, ToDoList[0].day);
+  let dayToSearch = new Date(ToDo.year, ToDo.month - 1, ToDo.day);
   // 開始日から今日まで探索
   while (today.getDate() !== dayToSearch.getDate()) {
-    let dayToSearchArea = dateToArea(dayToSearch);
+    let dayToSearchArea = dateToElement(dayToSearch);
     // ToDo開始月と今日の月が異なるとき
     if (!dayToSearchArea) {
       dayToSearch = new Date(today.getFullYear(), today.getMonth(), 1);
-      dayToSearchArea = dateToArea(dayToSearch);
+      dayToSearchArea = dateToElement(dayToSearch);
     }
     // 子要素が空なら未完了印をつける
     if (!dayToSearchArea.children.length) {
@@ -100,8 +101,8 @@ async function showCompletedDate() {
 }
 
 // 前日にタスクを完了したかどうかを確認する
-function isCompletedPreviousDay(ToDoList) {
-  const lastCompletedDate = ToDoList.completedDate.slice(-1)[0];
+function isCompletedPreviousDay(ToDo) {
+  const lastCompletedDate = ToDo.completedDate.slice(-1)[0];
   const today = new Date();
   if (lastCompletedDate === dateToCSV(today, 1)){
     return true;
@@ -115,7 +116,7 @@ function dateToCSV(date, daysAgo){
 }
 
 // 日付配列からカレンダーの日付領域を取得して返す関数
-function arrayToArea(date) {
+function arrayToElement(date) {
   let dateArea = document.getElementById(`${date[0]}_${date[1]}_${date[2]}`);
   if (!dateArea) {
     return;
@@ -124,17 +125,17 @@ function arrayToArea(date) {
 }
 
 // date型からカレンダーの日付領域名を取得して返す関数
-function dateToArea(date) {
+function dateToElement(date) {
   const dateArea = document.getElementById(`${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`);
   return dateArea;
 }
 
-async function setToDo(goal){
-  await window.dataapi.setlist(goal);
+async function setToDo(ToDo){
+  await window.dataapi.settodo(ToDo);
 }
 
 // ToDo取得、同期処理で利用する
 function fetchToDo(){
-  const ToDo = window.dataapi.getlist();
+  const ToDo = window.dataapi.gettodo();
   return ToDo;
 }
