@@ -1,9 +1,8 @@
 'use strict'
 // ToDoリストを初期化したのちに入力されたToDoをリストに追加する関数
-async function addToDo() {
+function addToDo() {
   initToDo();
   const item = document.querySelector("#ToDoItem").value;
-  const ToDoList = await window.dataapi.getlist();
   let today = new Date();
   let completedDate = new Array();
   let goal = {
@@ -14,36 +13,36 @@ async function addToDo() {
     days: 0,
     completedDate: completedDate
   };
-  ToDoList.push(goal);//今回追加されたものをデータに追加
-  await window.dataapi.setlist(ToDoList);//preloadを介してmainjsでStoreのデータを保存
+  setToDo(goal);
 }
 
 // ToDoのステータスを表示する関数
 async function showToDo() {
   // 目標名表示
   const goalText = document.getElementById('goal-text');
-  const ToDoList = await window.dataapi.getlist();
-  goalText.textContent = ToDoList[0].name;
+  const ToDoList = await fetchToDo();
+  console.log(ToDoList);
+  goalText.textContent = ToDoList.name;
   // 開始日
   const year = document.getElementById('year');
   const month = document.getElementById('month');
   const day = document.getElementById('day');
-  year.textContent = ToDoList[0].year;
-  month.textContent = ToDoList[0].month;
-  day.textContent = ToDoList[0].day;
+  year.textContent = ToDoList.year;
+  month.textContent = ToDoList.month;
+  day.textContent = ToDoList.day;
   // 継続日数
   const days = document.getElementById('days');
   // 前日未完了の場合、継続日数リセット
   if(!isCompletedPreviousDay(ToDoList)){
-    ToDoList[0].days = 0;
-    await window.dataapi.setlist(ToDoList);
+    ToDoList.days = 0;
+    // await window.dataapi.setlist(ToDoList);
   }
-  days.textContent = ToDoList[0].days;
+  days.textContent = ToDoList.days;
 }
 
 // ToDoリストを初期化する関数
 async function initToDo() {
-  await window.dataapi.todo_all_del();
+  await window.dataapi.todoalldel();
 }
 
 // ToDoを完了状態にする関数
@@ -63,7 +62,7 @@ async function completeToDo() {
 // カレンダーにToDoの完了状態を表示する関数
 async function showCompletedDate() {
   const ToDoList = await window.dataapi.getlist();
-  if (!ToDoList[0].completedDate.length) {
+  if (!ToDoList.completedDate.length) {
     return;
   }
 
@@ -102,7 +101,7 @@ async function showCompletedDate() {
 
 // 前日にタスクを完了したかどうかを確認する
 function isCompletedPreviousDay(ToDoList) {
-  const lastCompletedDate = ToDoList[0].completedDate.slice(-1)[0];
+  const lastCompletedDate = ToDoList.completedDate.slice(-1)[0];
   const today = new Date();
   if (lastCompletedDate === dateToCSV(today, 1)){
     return true;
@@ -130,9 +129,12 @@ function dateToArea(date) {
   return dateArea;
 }
 
-// ToDoリストをすべて削除する関数
-async function toDoAllDel() {
-  const ToDoList = await window.dataapi.getlist();
-  ToDoList.shift();
-  await window.dataapi.setlist(ToDoList);
+async function setToDo(goal){
+  await window.dataapi.setlist(goal);
+}
+
+// ToDo取得、同期処理で利用する
+function fetchToDo(){
+  const ToDo = window.dataapi.getlist();
+  return ToDo;
 }

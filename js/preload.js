@@ -4,6 +4,6 @@ contextBridge.exposeInMainWorld(
     'dataapi', {
     getlist: () => ipcRenderer.invoke("getlist"),
     setlist: (data) => ipcRenderer.invoke("setlist", data),
-    toDoAllDel: () => ipcRenderer.invoke("toDoAllDel"),
+    todoalldel: () => ipcRenderer.invoke("todoalldel"),
     window_close: () => ipcRenderer.invoke("window_close"),
 }); 

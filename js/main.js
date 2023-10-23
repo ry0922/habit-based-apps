@@ -71,7 +71,7 @@ app.on("ready", function () {
 
 // getlist(data取得処理)
 ipcMain.handle('getlist', async () => {
-    return Store_Data.get('ToDoList', []);//ToDoListがあれば取り出し、なければからのリストを返す
+    return Store_Data.get('ToDoList');//ToDoListがあれば取り出し、なければからのリストを返す
 });
 
 // setlist(data保存処理)
@@ -80,7 +80,7 @@ ipcMain.handle("setlist", async (event, data) => {
 });
 
 // リスト削除
-ipcMain.handle('toDoAllDel', async () => {
+ipcMain.handle('todoalldel', async () => {
     Store_Data.delete('ToDoList');//ToDoListのデータを削除
 });
 
