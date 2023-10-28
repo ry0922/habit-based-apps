@@ -44,7 +44,7 @@ app.on("ready", function () {
         }
     });
 
-    if (Store_Data.has('ToDoList')) {
+    if (Store_Data.has('ToDo')) {
         //mainWindowでhtmlファイルを開く
         //"file://" + path.join(__dirname, 'index.html'); => file://作業ディレクトリ/index.html
         mainWindow.loadURL("file://" + path.join(path.resolve(__dirname, '../'), 'index.html'));
@@ -99,7 +99,7 @@ function isCompletedToday() {
     if(typeof ToDo === "undefined"){
         return;
     }
-    ToDo.completedDate.forEach((data) => {
+    ToDo._completedDate.forEach((data) => {
         let date = data.split(',');
         let completedDate = new Date(date[0], date[1] - 1, date[2]);
         if (completedDate.getTime() === today.getTime()) {
